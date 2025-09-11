@@ -36,7 +36,6 @@ async function main(query) {
   console.log(response.text);
   return response.text;
 }
-await main("when where you created?")
 app.post("/", async (req, res) => {
   if(req.body.apiKey === "cybernia") {
     res.json({response: await main(req.body.context)})
