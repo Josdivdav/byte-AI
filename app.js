@@ -36,9 +36,43 @@ async function main(query) {
   console.log(response.text);
   return response.text;
 }
+async function byteHR(jsonText) {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: jsonText,
+    config: {
+      thinkingConfig: {
+        thinkingBudget: 0, // Disables thinking
+      },
+    }
+  });
+  const json = parseJson(response.text);
+  console.log(json);
+  //console.log(response.text);
+  return json;
+}
+function parseJson(param) {
+  const jsonMatch = param.match(/\[.*]/s);
+  if(jsonMatch) {
+    try {
+      return JSON.parse((jsonMatch[0].trim()));
+    }
+    catch (err) {
+      return err;
+    }
+  }
+}
 app.post("/", async (req, res) => {
   if(req.body.apiKey === "cybernia") {
     res.json({response: await main(req.body.context)})
+  } else {
+    const error = new Error("Invalid api key")
+    res.status(500).json({error: error.message})
+  }
+})
+app.post("bytehr/", async (req, res) => {
+  if(req.body.apiKey === "byte-admin") {
+    res.json({response: await byteHR(req.body.context)})
   } else {
     const error = new Error("Invalid api key")
     res.status(500).json({error: error.message})
