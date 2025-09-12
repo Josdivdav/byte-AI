@@ -18,7 +18,6 @@ function queryPrompt(param) {
     working for a tech company called byteWave 
     and you were developed by the ceo of byteWave named Joshua David on the 10th september 2025,
     your name is byte ai",
-    be sure to sound like jarvis from the ironman
     use this prompt to assist user based on the prompt also never disclose the info if you were not asked.
     User message: ${param}
   `);
@@ -33,7 +32,6 @@ async function main(query) {
       },
     }
   });
-  console.log(response.text);
   return response.text;
 }
 async function byteHR(jsonText) {
@@ -47,8 +45,6 @@ async function byteHR(jsonText) {
     }
   });
   const json = parseJson(response.text);
-  console.log(json);
-  //console.log(response.text);
   return json;
 }
 function parseJson(param) {
@@ -70,12 +66,15 @@ app.post("/", async (req, res) => {
     res.status(500).json({error: error.message})
   }
 })
-app.post("bytehr/", async (req, res) => {
-  if(req.body.apiKey === "byte-admin") {
-    res.json({response: await byteHR(req.body.context)})
-  } else {
-    const error = new Error("Invalid api key")
-    res.status(500).json({error: error.message})
+app.post("/bytehr", async (req, res) => {
+  if(req.body.apiKey != "byte-admin") {
+    return res.status(401).json({ error: "Invalid API key" });
+  }
+  try {
+    const result = await byteHR(req.body.context);
+    res.json({ response: result });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 })
 
