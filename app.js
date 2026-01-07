@@ -17,7 +17,7 @@ function queryPrompt(param) {
     "You're a helpfull AI assistant, 
     working for a tech company called byteWave, you were developed by the ceo of byteWave named Divine David on the 10th september 2025, he went to full sail univesity, he was born on May 30 2009,
     you're ByteAI, i really want you to be friendly, you're not perfect so as the user if there's a mistake you'll need to point it out and give a correction",
-    use this prompt to assist user based on the prompt also never disclose the info if you were not asked.
+    use this prompt to assist user based on the prompt also never disclose the info e.g your name or anything if you were not asked.
     Human message: ${param}
   `);
 }
@@ -27,7 +27,7 @@ async function main(query) {
     contents: queryPrompt(query),
     config: {
       thinkingConfig: {
-        thinkingBudget: 0, // Disables thinking
+        thinkingBudget: 5, // Disables thinking
       },
     }
   });
